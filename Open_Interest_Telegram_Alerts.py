@@ -9,14 +9,15 @@ from bs4 import BeautifulSoup
 import json
 
 
-API_Token = '1987736013:AAHIiIvGOoTM71j1EDgIquVYtv-1kECuEZc'
-Chat_Id = -1001495701812
+API_Token = 'YOUR TOKEN HERE'
+Chat_Id = 'YOUR CHAT ID HERE'
 bot = telegram.Bot(token = API_Token)
 
 funding_history_before_btc = 0
 funding_history_before_usdt = 0
 long_history_before_btc = 0
 short_history_before_btc = 0
+btcusdt = 0
 
 
 
@@ -106,11 +107,11 @@ def longshort_ratio_func():
         output_text_return += "롱 계정 : " + str(longshort_ratio_longAccount) + "% ( - )\n"
 
     else:
-        if(longshort_ratio_longAccount - long_history_before_btc > 0):
-            output_text_return += "롱 계정 : " + str(longshort_ratio_longAccount) + "% (+" + str("{:0,.2f}".format(round(longshort_ratio_longAccount - long_history_before_btc))) + ")\n"
+        if(longshort_ratio_longAccount - long_history_before_btc >= 0):
+            output_text_return += "롱 계정 : " + str(longshort_ratio_longAccount) + "% (+" + str("{:0,.2f}".format(longshort_ratio_longAccount - long_history_before_btc)) + ")\n"
         
         else:
-            output_text_return += "롱 계정 : " + str(longshort_ratio_longAccount) + "% (" + str("{:0,.2f}".format(round(longshort_ratio_longAccount - long_history_before_btc))) + ")\n"
+            output_text_return += "롱 계정 : " + str(longshort_ratio_longAccount) + "% (" + str("{:0,.2f}".format(longshort_ratio_longAccount - long_history_before_btc)) + ")\n"
         
 
 
@@ -118,11 +119,11 @@ def longshort_ratio_func():
         output_text_return += "숏 계정 : " + str(longshort_ratio_shortAccount) + "% ( - )"
 
     else:
-        if(longshort_ratio_shortAccount - short_history_before_btc > 0):
-            output_text_return += "숏 계정 : " + str(longshort_ratio_shortAccount) + "% (+" + str("{:0,.2f}".format(round(longshort_ratio_shortAccount - short_history_before_btc))) + ")"
+        if(longshort_ratio_shortAccount - short_history_before_btc >= 0):
+            output_text_return += "숏 계정 : " + str(longshort_ratio_shortAccount) + "% (+" + str("{:0,.2f}".format(longshort_ratio_shortAccount - short_history_before_btc)) + ")"
         
         else:
-            output_text_return += "숏 계정 : " + str(longshort_ratio_shortAccount) + "% (" + str("{:0,.2f}".format(round(longshort_ratio_shortAccount - short_history_before_btc))) + ")"
+            output_text_return += "숏 계정 : " + str(longshort_ratio_shortAccount) + "% (" + str("{:0,.2f}".format(longshort_ratio_shortAccount - short_history_before_btc)) + ")"
         
 
 
