@@ -62,27 +62,27 @@ def longshort_ratio_func():
 
 
         if(funding_history_before_btc == 0):
-            output_text_return += "미결제 약정\n" + "{:0,.3f}".format(sumOpenInterest) + " BTC ( - )\n\n"
+            output_text_return += "Open Interest\n" + "{:0,.3f}".format(sumOpenInterest) + " BTC ( - )\n\n"
 
         else:
             if(sumOpenInterest - funding_history_before_btc > 0):
-                output_text_return += "미결제 약정\n" + "{:0,.3f}".format(sumOpenInterest) + " BTC (+" + "{:0,.3f}".format(sumOpenInterest - funding_history_before_btc) + ")\n\n"
+                output_text_return += "Open Interest\n" + "{:0,.3f}".format(sumOpenInterest) + " BTC (+" + "{:0,.3f}".format(sumOpenInterest - funding_history_before_btc) + ")\n\n"
             
             else:
-                output_text_return += "미결제 약정\n" + "{:0,.3f}".format(sumOpenInterest) + " BTC (" + "{:0,.3f}".format(sumOpenInterest - funding_history_before_btc) + ")\n\n"
+                output_text_return += "Open Interest\n" + "{:0,.3f}".format(sumOpenInterest) + " BTC (" + "{:0,.3f}".format(sumOpenInterest - funding_history_before_btc) + ")\n\n"
             
 
 
 
         if(funding_history_before_usdt == 0):
-            output_text_return += "미결제 약정의 명목 가치\n" + "{:0,.0f}".format(sumOpenInterestValue) + " USDT ( - )\n\n"
+            output_text_return += "Notional Value of Open Interest\n" + "{:0,.0f}".format(sumOpenInterestValue) + " USDT ( - )\n\n"
 
         else:
             if(sumOpenInterestValue - funding_history_before_usdt > 0):
-                output_text_return += "미결제 약정의 명목 가치\n" + "{:0,.0f}".format(sumOpenInterestValue) + " USDT (+" + "{:0,.0f}".format(sumOpenInterestValue - funding_history_before_usdt) + ")\n\n"
+                output_text_return += "Notional Value of Open Interest\n" + "{:0,.0f}".format(sumOpenInterestValue) + " USDT (+" + "{:0,.0f}".format(sumOpenInterestValue - funding_history_before_usdt) + ")\n\n"
             
             else:
-                output_text_return += "미결제 약정의 명목 가치\n" + "{:0,.0f}".format(sumOpenInterestValue) + " USDT (" + "{:0,.0f}".format(sumOpenInterestValue - funding_history_before_usdt) + ")\n\n"
+                output_text_return += "Notional Value of Open Interest\n" + "{:0,.0f}".format(sumOpenInterestValue) + " USDT (" + "{:0,.0f}".format(sumOpenInterestValue - funding_history_before_usdt) + ")\n\n"
             
 
 
@@ -109,26 +109,26 @@ def longshort_ratio_func():
 
 
         if(long_history_before_btc == 0):
-            output_text_return += "롱 계정 : " + str(longshort_ratio_longAccount) + "% ( - )\n"
+            output_text_return += "Long Account : " + str(longshort_ratio_longAccount) + "% ( - )\n"
 
         else:
             if(longshort_ratio_longAccount - long_history_before_btc >= 0):
-                output_text_return += "롱 계정 : " + str(longshort_ratio_longAccount) + "% (+" + str("{:0,.2f}".format(longshort_ratio_longAccount - long_history_before_btc)) + ")\n"
+                output_text_return += "Long Account : " + str(longshort_ratio_longAccount) + "% (+" + str("{:0,.2f}".format(longshort_ratio_longAccount - long_history_before_btc)) + ")\n"
             
             else:
-                output_text_return += "롱 계정 : " + str(longshort_ratio_longAccount) + "% (" + str("{:0,.2f}".format(longshort_ratio_longAccount - long_history_before_btc)) + ")\n"
+                output_text_return += "Long Account : " + str(longshort_ratio_longAccount) + "% (" + str("{:0,.2f}".format(longshort_ratio_longAccount - long_history_before_btc)) + ")\n"
             
 
 
         if(short_history_before_btc == 0):
-            output_text_return += "숏 계정 : " + str(longshort_ratio_shortAccount) + "% ( - )"
+            output_text_return += "Short Account : " + str(longshort_ratio_shortAccount) + "% ( - )"
 
         else:
             if(longshort_ratio_shortAccount - short_history_before_btc >= 0):
-                output_text_return += "숏 계정 : " + str(longshort_ratio_shortAccount) + "% (+" + str("{:0,.2f}".format(longshort_ratio_shortAccount - short_history_before_btc)) + ")"
+                output_text_return += "Short Account : " + str(longshort_ratio_shortAccount) + "% (+" + str("{:0,.2f}".format(longshort_ratio_shortAccount - short_history_before_btc)) + ")"
             
             else:
-                output_text_return += "숏 계정 : " + str(longshort_ratio_shortAccount) + "% (" + str("{:0,.2f}".format(longshort_ratio_shortAccount - short_history_before_btc)) + ")"
+                output_text_return += "Short Account : " + str(longshort_ratio_shortAccount) + "% (" + str("{:0,.2f}".format(longshort_ratio_shortAccount - short_history_before_btc)) + ")"
             
 
 
