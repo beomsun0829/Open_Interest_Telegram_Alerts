@@ -9,8 +9,8 @@ from bs4 import BeautifulSoup
 import json
 
 
-API_Token = 'Your Token here'
-Chat_Id = 'Your Chat Id here'
+API_Token = 'api_token_here'
+Chat_Id = 'chat_id_here'
 bot = telegram.Bot(token = API_Token)
 
 funding_history_before_btc = 0
@@ -19,30 +19,31 @@ long_history_before_btc = 0
 short_history_before_btc = 0
 btcusdt = 0
 
+print("Start Bot")
 
 
 def telegram_send_message(telegram_message):
     try:
         bot.send_message(chat_id = Chat_Id, text = telegram_message)
 
-    except:
-        print('bot_send_Error\n')
+    except Exception as e:
+        print('bot_send_Error\n', e)
+
 
 def job():
-    
     the_message = ''
     now = dt.datetime.now()
     now_minutes = now.minute
     the_message = "current time = " + str(now)
 
-    if(now_minutes % 5 == 0):
+    if(now_minutes % 1 == 0):
         the_message = longshort_ratio_func()
         if(the_message != ""):
             telegram_send_message(the_message)
 
 
 def longshort_ratio_func():
-
+    print("calculating longshort_ratio_func")
     try:
         output_text_return = ""
         global funding_history_before_btc
