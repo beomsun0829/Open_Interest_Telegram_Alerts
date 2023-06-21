@@ -36,7 +36,7 @@ def job():
     now_minutes = now.minute
     the_message = "current time = " + str(now)
 
-    if(now_minutes % 1 == 0):
+    if(now_minutes % 5 == 0):
         the_message = longshort_ratio_func()
         if(the_message != ""):
             telegram_send_message(the_message)
