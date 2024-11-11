@@ -1,6 +1,4 @@
-
 import telegram
-import schedule
 import time
 import datetime as dt
 
@@ -8,39 +6,22 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import json
 
-
-API_Token = 'api_token_here'
-Chat_Id = 'chat_id_here'
-bot = telegram.Bot(token = API_Token)
+API_Token = ''
+Chat_Id = ''
+bot = telegram.Bot(token=API_Token)
 
 funding_history_before_btc = 0
 funding_history_before_usdt = 0
 long_history_before_btc = 0
 short_history_before_btc = 0
-btcusdt = 0
 
 print("Start Bot")
 
-
 def telegram_send_message(telegram_message):
     try:
-        bot.send_message(chat_id = Chat_Id, text = telegram_message)
-
+        bot.send_message(chat_id=Chat_Id, text=telegram_message)
     except Exception as e:
         print('bot_send_Error\n', e)
-
-
-def job():
-    the_message = ''
-    now = dt.datetime.now()
-    now_minutes = now.minute
-    the_message = "current time = " + str(now)
-
-    if(now_minutes % 5 == 0):
-        the_message = longshort_ratio_func()
-        if(the_message != ""):
-            telegram_send_message(the_message)
-
 
 def longshort_ratio_func():
     print("calculating longshort_ratio_func")
@@ -53,101 +34,79 @@ def longshort_ratio_func():
 
         funding_history_raw = urlopen("https://www.binance.com/futures/data/openInterestHist?symbol=BTCUSDT&period=5m")
         funding_history_parser = BeautifulSoup(funding_history_raw, "html.parser")
-        Interest_Datas = str(funding_history_parser)
-        Interest_Datas = json.loads(Interest_Datas)
+        Interest_Datas = json.loads(str(funding_history_parser))
 
+        sumOpenInterest = round(float(Interest_Datas[-1]['sumOpenInterest']), 3)
+        sumOpenInterestValue = int(round(float(Interest_Datas[-1]['sumOpenInterestValue']), 0))
 
-        sumOpenInterest = round(float(Interest_Datas[29]['sumOpenInterest']),3)
-        sumOpenInterestValue = int(round(float(Interest_Datas[29]['sumOpenInterestValue']),0))
-
-
-
-        if(funding_history_before_btc == 0):
-            output_text_return += "Open Interest\n" + "{:0,.3f}".format(sumOpenInterest) + " BTC ( - )\n\n"
-
+        if funding_history_before_btc == 0:
+            output_text_return += f"Open Interest\n{sumOpenInterest:,.3f} BTC ( - )\n\n"
         else:
-            if(sumOpenInterest - funding_history_before_btc > 0):
-                output_text_return += "Open Interest\n" + "{:0,.3f}".format(sumOpenInterest) + " BTC (+" + "{:0,.3f}".format(sumOpenInterest - funding_history_before_btc) + ")\n\n"
-            
-            else:
-                output_text_return += "Open Interest\n" + "{:0,.3f}".format(sumOpenInterest) + " BTC (" + "{:0,.3f}".format(sumOpenInterest - funding_history_before_btc) + ")\n\n"
-            
+            diff = sumOpenInterest - funding_history_before_btc
+            output_text_return += f"Open Interest\n{sumOpenInterest:,.3f} BTC ({diff:+,.3f})\n\n"
 
-
-
-        if(funding_history_before_usdt == 0):
-            output_text_return += "Notional Value of Open Interest\n" + "{:0,.0f}".format(sumOpenInterestValue) + " USDT ( - )\n\n"
-
+        if funding_history_before_usdt == 0:
+            output_text_return += f"Notional Value of Open Interest\n{sumOpenInterestValue:,.0f} USDT ( - )\n\n"
         else:
-            if(sumOpenInterestValue - funding_history_before_usdt > 0):
-                output_text_return += "Notional Value of Open Interest\n" + "{:0,.0f}".format(sumOpenInterestValue) + " USDT (+" + "{:0,.0f}".format(sumOpenInterestValue - funding_history_before_usdt) + ")\n\n"
-            
-            else:
-                output_text_return += "Notional Value of Open Interest\n" + "{:0,.0f}".format(sumOpenInterestValue) + " USDT (" + "{:0,.0f}".format(sumOpenInterestValue - funding_history_before_usdt) + ")\n\n"
-            
+            diff_value = sumOpenInterestValue - funding_history_before_usdt
+            output_text_return += f"Notional Value of Open Interest\n{sumOpenInterestValue:,.0f} USDT ({diff_value:+,.0f})\n\n"
 
-
-        if(sumOpenInterest == funding_history_before_btc):
-            output_text_return = ""
-            return output_text_return
-            
-
+        if sumOpenInterest == funding_history_before_btc:
+            return ""
 
         funding_history_before_btc = sumOpenInterest
         funding_history_before_usdt = sumOpenInterestValue
 
-
-
         longshort_ratio_raw = urlopen("https://www.binance.com/futures/data/globalLongShortAccountRatio?symbol=BTCUSDT&period=5m")
-
         longshort_ratio_parser = BeautifulSoup(longshort_ratio_raw, "html.parser")
-        longshort_ratio_datas = str(longshort_ratio_parser)
-        longshort_ratio_datas = json.loads(longshort_ratio_datas)
+        longshort_ratio_datas = json.loads(str(longshort_ratio_parser))
 
-        longshort_ratio_longAccount = float("{:0,.2f}".format(float(longshort_ratio_datas[29]['longAccount']) * 100))
-        longshort_ratio_shortAccount = float("{:0,.2f}".format(float(longshort_ratio_datas[29]['shortAccount']) * 100))
+        longshort_ratio_longAccount = float("{:.2f}".format(float(longshort_ratio_datas[-1]['longAccount']) * 100))
+        longshort_ratio_shortAccount = float("{:.2f}".format(float(longshort_ratio_datas[-1]['shortAccount']) * 100))
 
-
-
-        if(long_history_before_btc == 0):
-            output_text_return += "Long Account : " + str(longshort_ratio_longAccount) + "% ( - )\n"
-
+        if long_history_before_btc == 0:
+            output_text_return += f"Long Account : {longshort_ratio_longAccount:.2f}% ( - )\n"
         else:
-            if(longshort_ratio_longAccount - long_history_before_btc >= 0):
-                output_text_return += "Long Account : " + str(longshort_ratio_longAccount) + "% (+" + str("{:0,.2f}".format(longshort_ratio_longAccount - long_history_before_btc)) + ")\n"
-            
-            else:
-                output_text_return += "Long Account : " + str(longshort_ratio_longAccount) + "% (" + str("{:0,.2f}".format(longshort_ratio_longAccount - long_history_before_btc)) + ")\n"
-            
+            diff_long = longshort_ratio_longAccount - long_history_before_btc
+            output_text_return += f"Long Account : {longshort_ratio_longAccount:.2f}% ({diff_long:+.2f})\n"
 
-
-        if(short_history_before_btc == 0):
-            output_text_return += "Short Account : " + str(longshort_ratio_shortAccount) + "% ( - )"
-
+        if short_history_before_btc == 0:
+            output_text_return += f"Short Account : {longshort_ratio_shortAccount:.2f}% ( - )"
         else:
-            if(longshort_ratio_shortAccount - short_history_before_btc >= 0):
-                output_text_return += "Short Account : " + str(longshort_ratio_shortAccount) + "% (+" + str("{:0,.2f}".format(longshort_ratio_shortAccount - short_history_before_btc)) + ")"
-            
-            else:
-                output_text_return += "Short Account : " + str(longshort_ratio_shortAccount) + "% (" + str("{:0,.2f}".format(longshort_ratio_shortAccount - short_history_before_btc)) + ")"
-            
-
+            diff_short = longshort_ratio_shortAccount - short_history_before_btc
+            output_text_return += f"Short Account : {longshort_ratio_shortAccount:.2f}% ({diff_short:+.2f})"
 
         long_history_before_btc = longshort_ratio_longAccount
         short_history_before_btc = longshort_ratio_shortAccount
 
         return output_text_return
 
-    except:
+    except Exception as e:
+        print("Error in longshort_ratio_func:", e)
         return ''
 
+def wait_until_next_run():
+    while True:
+        now = dt.datetime.now()
+        next_minute = (now.minute // 5 + 1) * 5
+        next_hour = now.hour
 
+        if next_minute >= 60:
+            next_minute = 0
+            next_hour = (now.hour + 1) % 24
 
+        next_run = now.replace(hour=next_hour, minute=next_minute, second=0, microsecond=0)
+        wait_seconds = (next_run - now).total_seconds()
 
-schedule.every(1).minutes.do(job)
-
+        if wait_seconds <= 0:
+            time.sleep(0.1)
+            continue
+        print(f"Waiting {wait_seconds:.2f} seconds until next run at {next_run.strftime('%Y-%m-%d %H:%M:%S')}")
+        time.sleep(wait_seconds)
+        break
 
 while True:
-    schedule.run_pending()
-    time.sleep(1)
-    
+    wait_until_next_run()
+    the_message = longshort_ratio_func()
+    if the_message != "":
+        telegram_send_message(the_message)
