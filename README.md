@@ -1,5 +1,10 @@
 # Open_Interest_Telegram_Alerts
 
+
+</br></br>
+This repository is down for updates
+Please use the RUST-migrated version
+
 </br></br>
 Based on Binance API, Alerts Open Interests, Long&amp;Short Ratio about BTC/USDT every 5 minutes.
 </br></br>
